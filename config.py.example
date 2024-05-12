@@ -1,0 +1,4 @@
+DB_HOST = "[Database Host]"
+DB_USER = "[KU Nontri Account (b6xxxxxxxxx)]"
+DB_PASSWD = "[KU Email]"
+DB_NAME = "[Database Name]"
