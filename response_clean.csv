@@ -1,4 +1,4 @@
-timestamp,age_range,Gender,Occupation,district,alt_district,Are you familiar with the term PM2.5?,concern_level,lived_year,get_info_sources,health_symptom,current_feeling,current_AQI,change_behavior,reconsidering_PM_level,factors_influence,"According to AQI level(previous question), do you consider doing outside activities?",,,,
+timestamp,age_range,gender,occupation,district,alt_district,familiar,concern_level,lived_year,get_info_sources,health_symptom,current_feeling,current_AQI,change_behavior,reconsidering_PM_level,factors_influence,go_outside,,,,
 "3/4/2024, 23:24:12",18-24,Female,Student,Chatuchak 10900 จตุจักร,,Yes,5,1-3 years,Apps,allergic,Moderately Polluted,78,5,50-100 (Moderate),Traffic,Yes,,,,
 "3/4/2024, 23:44:33",18-24,Female,Student,Chatuchak 10900 จตุจักร,,Yes,4,1-3 years,"Websites, Apps",allergic,Moderately Polluted,80,4,101-150 (Unhealthy for Sensitive Groups),"Traffic, Weather (Heat, Rain)",Yes,,,,
 "16/4/2024, 17:57:44",18-24,Female,Student,Chatuchak 10900 จตุจักร,,Yes,5,1-3 years,Apps,,Slightly Polluted,81,3,101-150 (Unhealthy for Sensitive Groups),"Traffic, Weather (Heat, Rain)",Yes,,,,0
