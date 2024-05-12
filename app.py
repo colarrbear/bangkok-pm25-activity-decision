@@ -1,13 +1,22 @@
-"""for a"""
-from flask import Flask
+from flask import Flask, render_template
+import pandas as pd
+import matplotlib.pyplot as plt
 
-# Create a Flask application instance
 app = Flask(__name__)
 
-# Define a route and a view function
 @app.route('/')
 def index():
-    return 'Hello, World!'
+    df = pd.read_csv('response_clean.csv')
+    plt.figure(figsize=(8, 6))
+    plt.plot(df['concern_level'], df['current_AQI'])
+    plt.title('Data Visualization')
+    plt.xlabel('X-axis')
+    plt.ylabel('Y-axis')
+    plt.grid(True)
+    plot_path = 'static/plot.png'
+    plt.savefig(plot_path)
+    return render_template('index.html', plot_path=plot_path)
+
 
 # Run the application
 if __name__ == '__main__':
