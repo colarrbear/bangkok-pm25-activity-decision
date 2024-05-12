@@ -56,14 +56,18 @@ db_data = pd.read_sql_query("SELECT * FROM AQMTHAI", pool.connection())
 csv_data = pd.read_csv("response_clean.csv")
 
 # Convert CSV timestamps to a common format
-csv_df = pd.DataFrame(csv_data)
-csv_df["datetime"] = pd.to_datetime(csv_df["datetime"], format="%d/%m/%Y, %H:%M:%S")
-csv_df["datetime"] = csv_df["datetime"].dt.strftime("%Y-%m-%d %H:%M:%S")
-
-# Convert database timestamps to a common format (in this case, already in ISO 8601 format)
-db_df = pd.DataFrame(db_data)
+# csv_df = pd.DataFrame(csv_data)
+# csv_df["datetime"] = pd.to_datetime(csv_df["datetime"], format="%d/%m/%Y, %H:%M:%S")
+# csv_df["datetime"] = csv_df["datetime"].dt.strftime("%Y-%m-%d %H:%M:%S")
+csv_timestamp = csv_data["datetime"][0]
+# Convert CSV timestamp to the same format as the database timestamp
+csv_datetime = datetime.strptime(csv_timestamp, "%d/%m/%Y, %H:%M:%S")
+formatted_csv_timestamp = csv_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
 # Merge datasets based on timestamp
-merged_df = pd.merge(csv_df, db_df, on="datetime")
+# merged_df = pd.merge(csv_df, db_df, on="datetime")
 
-print(merged_df)
+# print(merged_df)
+
+print("Database Timestamp:", db_data["datetime"][0])
+print("CSV Timestamp:", formatted_csv_timestamp)
