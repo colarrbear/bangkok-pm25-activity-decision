@@ -22,13 +22,15 @@ class AirQuality(BaseModel):
     aqi: int
     level: str
 
-
 @app.get("/api/air_quality")
 async def get_air_quality() -> list[AirQuality]:
-    with pool.connection() as conn, conn.cursor() as cs:
-        cs.execute("""
-            SELECT datetime, district, location, aqi, level FROM airbkk
-        """)
-        result = [AirQuality(ts=ts, district=district, location=location, aqi=aqi, level=level)
-                  for ts, district, location, aqi, level in cs.fetchall()]
-    return result
+    try:
+        with pool.connection() as conn, conn.cursor() as cs:
+            cs.execute("""
+                SELECT datetime, district, location, aqi, level FROM airbkk
+            """)
+            result = [AirQuality(ts=ts, district=district, location=location, aqi=aqi, level=level)
+                      for ts, district, location, aqi, level in cs.fetchall()]
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
