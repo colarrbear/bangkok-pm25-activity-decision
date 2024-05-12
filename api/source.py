@@ -15,20 +15,31 @@ pool = PooledDB(creator=pymysql,
 app = FastAPI()
 
 
-class AirQuality(BaseModel):
+class TempValue(BaseModel):
     ts: datetime
-    district: str
-    location: str
-    aqi: int
-    level: str
+    temp: float
 
 
-@app.get("/api/air_quality")
-async def get_air_quality() -> list[AirQuality]:
+class Pm25Value(BaseModel):
+    ts: datetime
+    pm25: int
+
+
+@app.get("/api/temp")
+async def get_temp() -> list[TempValue]:
     with pool.connection() as conn, conn.cursor() as cs:
         cs.execute("""
-            SELECT datetime, district, location, aqi, level FROM airbkk
+            SELECT ts, temp FROM temp
         """)
-        result = [AirQuality(ts=ts, district=district, location=location, aqi=aqi, level=level)
-                  for ts, district, location, aqi, level in cs.fetchall()]
+        result = [TempValue(ts=ts, temp=temp) for ts, temp in cs.fetchall()]
+    return result
+
+
+@app.get("/api/pm25")
+async def get_pm25() -> list[Pm25Value]:
+    with pool.connection() as conn, conn.cursor() as cs:
+        cs.execute("""
+            SELECT ts, pm25 FROM pm25
+        """)
+        result = [Pm25Value(ts=ts, pm25=pm25) for ts, pm25 in cs.fetchall()]
     return result

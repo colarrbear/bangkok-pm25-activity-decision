@@ -29,6 +29,7 @@ async def get_air_quality() -> list[AirQuality]:
         cs.execute("""
             SELECT datetime, district, location, aqi, level FROM airbkk
         """)
-        result = [AirQuality(ts=ts, district=district, location=location, aqi=aqi, level=level)
+        result = [AirQuality(ts=ts, district=district, location=location,
+                             aqi=aqi, level=level)
                   for ts, district, location, aqi, level in cs.fetchall()]
     return result
