@@ -1,3 +1,4 @@
+"""for launching a visualization"""
 from flask import Flask, render_template
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -6,16 +7,23 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    # return 'Hello, World!'
     df = pd.read_csv('response_clean.csv')
     plt.figure(figsize=(8, 6))
-    plt.scatter(df['concern_level'], df['change_behavior'])
-    plt.title('Change in Behavior vs Concern Level')
-    plt.xlabel('Concern Level')
-    plt.ylabel('Change in Behavior')
-    # plt.grid(True)
+    plt.plot(df['X'], df['Y'])
+    plt.title('Data Visualization')
+    plt.xlabel('X-axis')
+    plt.ylabel('Y-axis')
+    plt.grid(True)
+
+    # Save the plot to a file
     plot_path = 'static/plot.png'
     plt.savefig(plot_path)
-    return render_template('index.html', plot_path=plot_path)
+    plt.close()
+
+    # Render the HTML template with the plot
+    # return render_template('index.html', plot_path=plot_path)
+
 
 
 # Run the application
