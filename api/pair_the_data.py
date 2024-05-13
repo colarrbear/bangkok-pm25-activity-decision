@@ -1,3 +1,5 @@
+import re
+
 import pymysql
 import pandas as pd
 from dbutils.pooled_db import PooledDB
@@ -18,56 +20,35 @@ pool = PooledDB(
     blocking=True,
 )
 
-# # Load data from the database and CSV file
-# def get_data_from_db():
-#     conn = pool.connection()
-#     cursor = conn.cursor()
-#     cursor.execute("SELECT * FROM AQMTHAI")
-#     data = cursor.fetchall()
-#     cursor.close()
-#     conn.close()
-#     return data
-#
-# def get_response_from_csv():
-#     with open('response_clean.csv', 'r') as f:
-#         # convert datetime to same format as in the database
-#         data = pd.read_csv(f)
-#         data['timestamp'] = pd.to_datetime(data['timestamp']).dt.strftime('%Y-%m-%d %H:%M:%S')
-#         data = data.to_dict(orient='records')
-#     return data
-#
-# # Pair the data from the database and CSV file
-# def pair_data():
-#     data = get_data_from_db()
-#     response = get_response_from_csv()
-#     paired_data = []
-#     for d in data:
-#         for r in response:
-#             if d[1] == r['timestamp']:
-#                 paired_data.append((d[0], r['timestamp'], r['value'], r['response']))
-#     return paired_data
-#
-#
-# # print to check the output
-# print(pair_data())
-
 # Load data from the database and CSV file
-db_data = pd.read_sql_query("SELECT * FROM AQMTHAI", pool.connection())
+# db_data = pd.read_sql_query("SELECT * FROM AQMTHAI", pool.connection())
 csv_data = pd.read_csv("response_clean.csv")
 
-# Convert CSV timestamps to a common format
-# csv_df = pd.DataFrame(csv_data)
-# csv_df["datetime"] = pd.to_datetime(csv_df["datetime"], format="%d/%m/%Y, %H:%M:%S")
-# csv_df["datetime"] = csv_df["datetime"].dt.strftime("%Y-%m-%d %H:%M:%S")
-csv_timestamp = csv_data["datetime"][0]
-# Convert CSV timestamp to the same format as the database timestamp
-csv_datetime = datetime.strptime(csv_timestamp, "%d/%m/%Y, %H:%M:%S")
-formatted_csv_timestamp = csv_datetime.strftime("%Y-%m-%d %H:%M:%S")
+# csv_timestamp = csv_data["datetime"][0]
+# # Convert CSV timestamp to the same format as the database timestamp
+# csv_datetime = datetime.strptime(csv_timestamp, "%d/%m/%Y, %H:%M:%S")
+# formatted_csv_timestamp = csv_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
-# Merge datasets based on timestamp
-# merged_df = pd.merge(csv_df, db_df, on="datetime")
+# print("Database Timestamp:", db_data["datetime"][0])
+# print("CSV Timestamp:", formatted_csv_timestamp)
 
-# print(merged_df)
+# clean the data -> district must have only "เขต" + thai district name
+original_location = csv_data["district"]
+# Chatuchak 10900 จตุจักร -> เขตจตุจักร
+cleaned_location = []
 
-print("Database Timestamp:", db_data["datetime"][0])
-print("CSV Timestamp:", formatted_csv_timestamp)
+for location in original_location:
+    # get only thai district
+    thai_dist = re.split(r'\d+', location)[1]
+    cleaned_location.append(f'เขต{thai_dist}')
+# remove spaces
+cleaned_location = [location.replace(" ", "") for location in cleaned_location]
+# print(cleaned_location)
+
+# pair data (AQI index "aqi" from database, AQI index ("current_AQI") from response and
+# Decision to go outside ("go_outside")) based on timestamp and location
+
+pair_data = []
+# if location in database is the same as location in response
+# and timestamp in database is the same as timestamp in response
+# then pair the data
