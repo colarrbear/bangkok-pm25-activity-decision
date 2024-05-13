@@ -76,28 +76,32 @@ def controller_get_locationto_decision():  # noqa: E501
                                           district=district, ts=ts))
     return data
 
-def controller_get_pm_api():  # noqa: E501
-    """Returns a list of PM.
+# def controller_get_pm_api():  # noqa: E501
+#     """Returns a list of PM.
+#
+#      # noqa: E501
+#
+#     :rtype: List[PMAPI]
+#     """
+#     with pool.connection() as conn, conn.cursor() as cs:
+#         cs.execute("""
+#             SELECT datetime, district, aqi, pm25
+#             FROM airbkk
+#             """)
+#
+#         # handle null values
+#         result = []
+#         for row in cs.fetchall():
+#             ts, district, aqi, pm25 = row
+#             if pm25 is None or pm25 == "NULL":
+#                 pm25 = 0
+#             elif aqi == "NULL" or aqi is None:
+#                 aqi = 0
+#             result.append(models.PMAPI(district=district, ts=ts, aqi=aqi, pm25=pm25))
+#
+#     return result
 
-     # noqa: E501
-
-    :rtype: List[PMAPI]
-    """
-    with pool.connection() as conn, conn.cursor() as cs:
-        cs.execute("""
-            SELECT a.datetime, a.district, a.aqi, a.pm25
-            FROM airbkk a
-            """)
-
-        # handle null values
-        result = []
-        for row in cs.fetchall():
-            ts, district, aqi, pm25 = row
-            if pm25 is None:
-                pm25 = 0
-            result.append(models.PMAPI(district=district, ts=ts, aqi=aqi, pm25=pm25))
-
-    return result
+#
 
 
 
