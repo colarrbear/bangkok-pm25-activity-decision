@@ -5,3 +5,5 @@ seaborn
 wordcloud
 pymysql
 dbutils
+pydantic
+fastapi
