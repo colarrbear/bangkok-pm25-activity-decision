@@ -21,7 +21,8 @@ pool = PooledDB(creator=pymysql,
 # from swagger_server.models.locationto_decision import LocationtoDecision  # noqa: E501
 # from swagger_server.models.pmapi import PMAPI  # noqa: E501
 # from swagger_server import util
-
+# -- SELECT AQMTHAI.datetime, AQMTHAI.district, AQMTHAI.aqi, airbkk.aqi
+#             -- FROM AQMTHAI INNER JOIN airbkk ON AQMTHAI.datetime = airbkk.datetime
 
 def controller_get_api():  # noqa: E501
     """Returns a list of API.
@@ -33,18 +34,10 @@ def controller_get_api():  # noqa: E501
     """
     with pool.connection() as conn, conn.cursor() as cs:
         cs.execute("""
-            SELECT AQMTHAI.datetime, AQMTHAI.district, AQMTHAI.aqi, airbkk.aqi
-            FROM AQMTHAI INNER JOIN airbkk ON AQMTHAI.datetime = airbkk.datetime
+            SELECT AQMTHAI.id, AQMTHAI.datetime, AQMTHAI.district, AQMTHAI.aqi
+            FROM AQMTHAI
             """)
-        # cs.execute("SELECT district, aqi FROM airbkk LEFT JOIN AQMTHAI ON airbkk.datetime = AQMTHAI.datetime")
-        # result = [models.BasinShort(basin_id, name) for basin_id, name in
-        #           cs.fetchall()]
-        result = [models.API(*row) for row in cs.fetchall()]
-
-        # Modify the "ts" format
-        # for item in result:
-        #     item.ts = item.ts.strftime('%Y-%m-%dT%H:%M')
-
+        result = [models.API(id=id, ts=ts, district=district, aqi=aqi) for id, ts, district, aqi in cs.fetchall()]
     return result
 
 
