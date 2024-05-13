@@ -28,7 +28,7 @@ from swagger_server import encoder
 def main():
     app = connexion.App(__name__, specification_dir='./openapi/')
     app.app.json_encoder = encoder.JSONEncoder
-    app.add_api('try_sth.yaml',
+    app.add_api('pm25_act_decision.yaml',
                 arguments={'title': 'PM2.5 Activity decision API'},
                 pythonic_params=True)
 
