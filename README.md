@@ -27,5 +27,23 @@ The required libraries and tools are listed in the `requirements.txt` file.
 ## Installation
 
 To install the necessary dependencies,
-[click to read](google.com) 
+[click to read](https://github.com/colarrbear/bangkok-pm25-activity-decision/wiki/Installation) 
+
+## Data sources:
+
+**Secondary Data**
+[AQMThai](http://www.aqmthai.com/web/home.php)
+[airbkk](https://airquality.airbkk.com/PublicWebClient/#/Modules/Aqs/HomePage)
+
+**Primary Data**
+[Questionaire](https://docs.google.com/forms/d/e/1FAIpQLSfDIvmLYXIghe2F_HjBkMdQS9ricroRHVAskI23B6Hch51A1g/viewform)
+or [click](https://github.com/colarrbear/bangkok-pm25-activity-decision/tree/1b50ef3795a3c92e50d85de86c0375ac767ba616/screenshots%20of%20questionnaire)
+
+[Questionaire Responses](https://github.com/colarrbear/bangkok-pm25-activity-decision/blob/main/response_clean.csv)
+
+
+
+
+
+
 
