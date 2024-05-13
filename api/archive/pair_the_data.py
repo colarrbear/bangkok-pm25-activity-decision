@@ -65,6 +65,6 @@ for db_index, db_row in db_data.iterrows():
             })
 
 # Now pair_data contains the paired records based on timestamp and location
-print(pair_data)
+# print(pair_data)
 
 
