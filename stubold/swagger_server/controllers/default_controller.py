@@ -7,7 +7,7 @@ from swagger_server.models.pmapi import PMAPI  # noqa: E501
 from swagger_server import util
 
 
-def controller_controller_get_api():  # noqa: E501
+def controller_get_api():  # noqa: E501
     """Returns a list of API.
 
      # noqa: E501
@@ -18,7 +18,7 @@ def controller_controller_get_api():  # noqa: E501
     return 'do some magic!'
 
 
-def controller_controller_get_locationto_decision():  # noqa: E501
+def controller_get_locationto_decision():  # noqa: E501
     """Returns a list of Decision.
 
      # noqa: E501
@@ -29,7 +29,7 @@ def controller_controller_get_locationto_decision():  # noqa: E501
     return 'do some magic!'
 
 
-def controller_controller_get_pm_api():  # noqa: E501
+def controller_get_pm_api():  # noqa: E501
     """Returns a list of PM.
 
      # noqa: E501

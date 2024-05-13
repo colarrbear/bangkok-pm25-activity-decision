@@ -14,35 +14,35 @@ class PMAPI(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, district: str=None, ts: str=None, aqi: float=None, pm2_5: float=None):  # noqa: E501
+    def __init__(self, ts: str=None, district: str=None, pm25: float=None, aqi: float=None):  # noqa: E501
         """PMAPI - a model defined in Swagger
 
+        :param pm25: The pm25 of this PMAPI.  # noqa: E501
+        :type pm25: float
         :param district: The district of this PMAPI.  # noqa: E501
         :type district: str
         :param ts: The ts of this PMAPI.  # noqa: E501
         :type ts: str
         :param aqi: The aqi of this PMAPI.  # noqa: E501
         :type aqi: float
-        :param pm2_5: The pm2_5 of this PMAPI.  # noqa: E501
-        :type pm2_5: float
         """
         self.swagger_types = {
-            'district': str,
+            'pm25': float,
             'ts': str,
-            'aqi': float,
-            'pm2_5': float
+            'district': str,
+            'aqi': float
         }
 
         self.attribute_map = {
-            'district': 'district',
+            'pm25': 'pm25',
             'ts': 'ts',
-            'aqi': 'AQI',
-            'pm2_5': 'PM2_5'
+            'district': 'district',
+            'aqi': 'AQI'
         }
-        self._district = district
+        self._pm25 = pm25
         self._ts = ts
+        self._district = district
         self._aqi = aqi
-        self._pm2_5 = pm2_5
 
     @classmethod
     def from_dict(cls, dikt) -> 'PMAPI':
@@ -75,6 +75,26 @@ class PMAPI(Model):
         """
 
         self._district = district
+
+    @property
+    def pm25(self) -> float:
+        """Gets the pm2.5 of this PMAPI.
+
+
+        :return: The pm2.5 of this PMAPI.
+        :rtype: float
+        """
+        return self._pm25
+
+    @pm25.setter
+    def pm25(self, pm25: float):
+        """Sets the pm25 of this PMAPI.
+
+        :param pm25: The id of this PMAPI.
+        :type pm25: float
+        """
+
+        self._pm25 = pm25
 
     @property
     def ts(self) -> str:
@@ -117,24 +137,3 @@ class PMAPI(Model):
         """
 
         self._aqi = aqi
-
-    @property
-    def pm2_5(self) -> float:
-        """Gets the pm2_5 of this PMAPI.
-
-
-        :return: The pm2_5 of this PMAPI.
-        :rtype: float
-        """
-        return self._pm2_5
-
-    @pm2_5.setter
-    def pm2_5(self, pm2_5: float):
-        """Sets the pm2_5 of this PMAPI.
-
-
-        :param pm2_5: The pm2_5 of this PMAPI.
-        :type pm2_5: float
-        """
-
-        self._pm2_5 = pm2_5

@@ -10,7 +10,7 @@ paths:
   /API:
     get:
       summary: Returns a list of API.
-      operationId: controller_controller_get_api
+      operationId: controller_get_api
       responses:
         "200":
           description: Success
@@ -25,7 +25,7 @@ paths:
   /LocationtoDecision:
     get:
       summary: Returns a list of Decision.
-      operationId: controller_controller_get_locationto_decision
+      operationId: controller_get_locationto_decision
       responses:
         "200":
           description: Success
@@ -40,7 +40,7 @@ paths:
   /PMAPI:
     get:
       summary: Returns a list of PM.
-      operationId: controller_controller_get_pm_api
+      operationId: controller_get_pm_api
       responses:
         "200":
           description: Success
@@ -73,6 +73,8 @@ components:
     LocationtoDecision:
       type: object
       properties:
+        id:
+          type: integer
         ts:
           type: string
         district:
@@ -84,22 +86,20 @@ components:
       example:
         decision: decision
         district: district
-        AQI: 0.80082819046101150206595775671303272247314453125
+        AQI: 6.02745618307040320615897144307382404804229736328125
+        id: 0
         ts: ts
     PMAPI:
       type: object
       properties:
-        district:
-          type: string
+        id:
+          type: integer
         ts:
           type: string
         AQI:
           type: number
-        PM2_5:
-          type: number
       example:
-        PM2_5: 6.02745618307040320615897144307382404804229736328125
-        district: district
-        AQI: 0.80082819046101150206595775671303272247314453125
+        AQI: 6.02745618307040320615897144307382404804229736328125
+        id: 0
         ts: ts
 

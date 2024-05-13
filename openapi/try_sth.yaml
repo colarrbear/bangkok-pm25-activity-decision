@@ -75,9 +75,11 @@ components:
     PMAPI:
       type: object
       properties:
-        id:
-          type: integer
+        district:
+          type: string
         ts:
           type: string
-        AQI:
+        aqi:
+          type: number
+        pm2_5:
           type: number

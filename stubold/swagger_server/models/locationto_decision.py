@@ -17,6 +17,7 @@ class LocationtoDecision(Model):
     def __init__(self, ts: str=None, district: str=None, aqi: float=None, decision: str=None):  # noqa: E501
         """LocationtoDecision - a model defined in Swagger
 
+        :param id: The id of this LocationtoDecision.  # noqa: E501
         :param ts: The ts of this LocationtoDecision.  # noqa: E501
         :type ts: str
         :param district: The district of this LocationtoDecision.  # noqa: E501

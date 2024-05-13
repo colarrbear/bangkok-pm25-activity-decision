@@ -14,8 +14,8 @@ from swagger_server.test import BaseTestCase
 class TestDefaultController(BaseTestCase):
     """DefaultController integration test stubs"""
 
-    def test_controller_controller_get_api(self):
-        """Test case for controller_controller_get_api
+    def test_controller_get_api(self):
+        """Test case for controller_get_api
 
         Returns a list of API.
         """
@@ -25,8 +25,8 @@ class TestDefaultController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
-    def test_controller_controller_get_locationto_decision(self):
-        """Test case for controller_controller_get_locationto_decision
+    def test_controller_get_locationto_decision(self):
+        """Test case for controller_get_locationto_decision
 
         Returns a list of Decision.
         """
@@ -36,8 +36,8 @@ class TestDefaultController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
-    def test_controller_controller_get_pm_api(self):
-        """Test case for controller_controller_get_pm_api
+    def test_controller_get_pm_api(self):
+        """Test case for controller_get_pm_api
 
         Returns a list of PM.
         """

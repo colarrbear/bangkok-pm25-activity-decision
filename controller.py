@@ -1,3 +1,4 @@
+#i
 import connexion
 import six
 import csv
@@ -62,8 +63,7 @@ def controller_get_locationto_decision():  # noqa: E501
     # from response_clean.csv: "district" and "decision"
     # read csv file
     data = []
-    with open('response_clean.csv', 'r') as f:
-        # lines = f.readlines()
+    with open('response_clean.csv', 'r', encoding='utf-8', errors='ignore') as f:
         csv_reader = csv.reader(f)
         next(csv_reader)
         for row in csv_reader:
@@ -75,25 +75,32 @@ def controller_get_locationto_decision():  # noqa: E501
                 models.LocationtoDecision(aqi=current_AQI, decision=go_outside,
                                           district=district, ts=ts))
     return data
-    # get only district and decision
-    # data = [line.strip().split(',') for line in lines]
-    # return [models.LocationtoDecision(AQI=current_AQI, decision=go_outside, district=district, ts=ts) for current_AQI, go_outside, district, ts in data]
 
 def controller_get_pm_api():  # noqa: E501
     """Returns a list of PM.
 
      # noqa: E501
 
-
     :rtype: List[PMAPI]
     """
     with pool.connection() as conn, conn.cursor() as cs:
         cs.execute("""
-            SELECT station_id, s.ename
-            FROM station s
-            INNER JOIN basin b ON s.basin_id=b.basin_id
-            WHERE b.basin_id=%s
-            """, [basin_id])
-        result = [models.StationShort(station_id, name) for station_id, name in cs.fetchall()]
+            SELECT a.datetime, a.district, a.aqi, a.pm25
+            FROM airbkk a
+            """)
+
+        # handle null values
+        result = []
+        for row in cs.fetchall():
+            ts, district, aqi, pm25 = row
+            if pm25 is None:
+                pm25 = 0
+            result.append(models.PMAPI(district=district, ts=ts, aqi=aqi, pm25=pm25))
+
     return result
+
+
+
+
+
 
