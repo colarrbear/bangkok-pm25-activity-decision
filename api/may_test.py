@@ -195,7 +195,7 @@ async def pair_with_aqmthai(
 
 
         # Load data from the CSV file
-        csv_data = pd.read_csv("response_clean.csv")
+        csv_data = pd.read_csv("../response_clean.csv")
         csv_data['datetime'] = pd.to_datetime(csv_data['datetime'])
 
         # Iterate through each record in the database data
