@@ -22,7 +22,7 @@ import re
 
 # Load data from the database and CSV file
 # db_data = pd.read_sql_query("SELECT * FROM AQMTHAI", pool.connection())
-csv_data = pd.read_csv("response_clean.csv")
+# csv_data = pd.read_csv("response_clean.csv")
 
 # csv_timestamp = csv_data["datetime"][0]
 
