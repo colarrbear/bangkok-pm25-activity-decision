@@ -32,9 +32,15 @@ def controller_get_api():  # noqa: E501
     :rtype: List[API]
     """
     with pool.connection() as conn, conn.cursor() as cs:
-        cs.execute("SELECT basin_id,ename FROM basin")
-        result = [models.BasinShort(basin_id, name) for basin_id, name in
-                  cs.fetchall()]
+        cs.execute("""
+            SELECT id, datetime, aqi
+            FROM airbkk
+            """)
+        # cs.execute("SELECT district, aqi FROM airbkk LEFT JOIN AQMTHAI ON airbkk.datetime = AQMTHAI.datetime")
+        # result = [models.BasinShort(basin_id, name) for basin_id, name in
+        #           cs.fetchall()]
+        result = [models.API(ts=ts, district=district, aqi=aqi)
+                  for ts, district, aqi in cs.fetchall()]
     return result
 
 
