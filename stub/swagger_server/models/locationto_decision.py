@@ -14,11 +14,10 @@ class LocationtoDecision(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, ts: str=None, district: str=None, aqi: float=None, decision: str=None):  # noqa: E501
+    def __init__(self, ts: str=None, district: str=None, aqi: float=None, decision: str=None):  # noqa: E501
         """LocationtoDecision - a model defined in Swagger
 
         :param id: The id of this LocationtoDecision.  # noqa: E501
-        :type id: int
         :param ts: The ts of this LocationtoDecision.  # noqa: E501
         :type ts: str
         :param district: The district of this LocationtoDecision.  # noqa: E501
@@ -29,7 +28,6 @@ class LocationtoDecision(Model):
         :type decision: str
         """
         self.swagger_types = {
-            'id': int,
             'ts': str,
             'district': str,
             'aqi': float,
@@ -37,13 +35,11 @@ class LocationtoDecision(Model):
         }
 
         self.attribute_map = {
-            'id': 'id',
             'ts': 'ts',
             'district': 'district',
             'aqi': 'AQI',
             'decision': 'decision'
         }
-        self._id = id
         self._ts = ts
         self._district = district
         self._aqi = aqi

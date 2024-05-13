@@ -64,8 +64,6 @@ components:
     LocationtoDecision:
       type: object
       properties:
-        id:
-          type: integer
         ts:
           type: string
         district:

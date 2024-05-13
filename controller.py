@@ -1,5 +1,6 @@
 import connexion
 import six
+import csv
 import sys
 from flask import abort
 import pymysql
@@ -38,7 +39,16 @@ def controller_get_api():  # noqa: E501
             FROM AQMTHAI
             """)
         result = [models.API(id=id, ts=ts, district=district, aqi=aqi) for id, ts, district, aqi in cs.fetchall()]
+        # result = [models.API(id=id, ts=ts, district=district, aqi=aqi) for id, ts, district, aqi in cs.fetchall()]
     return result
+    # cs.execute("""
+    #                 SELECT s, big.datetime, big.district, big.aqi
+    #                 FROM AQMTHAI big
+    #                 INNER JOIN airbkk small ON big.datetime = small.datetime
+    #                 """)
+    # result = [models.AQI(station_id, name) for station_id, name in
+    #           cs.fetchall()]
+    # return result
 
 
 def controller_get_locationto_decision():  # noqa: E501
@@ -49,19 +59,25 @@ def controller_get_locationto_decision():  # noqa: E501
 
     :rtype: List[LocationtoDecision]
     """
-    with pool.connection() as conn, conn.cursor() as cs:
-        cs.execute("""
-            SELECT basin_id, ename, area
-            FROM basin
-            WHERE basin_id=%s
-            """, [basin_id])
-        result = cs.fetchone()
-    if result:
-        basin_id, name, area = result
-        return models.BasinFull(basin_id, name, area)
-    else:
-        abort(404)
-
+    # from response_clean.csv: "district" and "decision"
+    # read csv file
+    data = []
+    with open('response_clean.csv', 'r') as f:
+        # lines = f.readlines()
+        csv_reader = csv.reader(f)
+        next(csv_reader)
+        for row in csv_reader:
+            district = row[4]
+            current_AQI = row[12]
+            go_outside = row[16]
+            ts = row[0]
+            data.append(
+                models.LocationtoDecision(aqi=current_AQI, decision=go_outside,
+                                          district=district, ts=ts))
+    return data
+    # get only district and decision
+    # data = [line.strip().split(',') for line in lines]
+    # return [models.LocationtoDecision(AQI=current_AQI, decision=go_outside, district=district, ts=ts) for current_AQI, go_outside, district, ts in data]
 
 def controller_get_pm_api():  # noqa: E501
     """Returns a list of PM.
