@@ -1,0 +1,293 @@
+[
+    {
+        "id": "333f05ad22f8345a",
+        "type": "tab",
+        "label": "AQMTHAI USE THIS",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "3f7279dee6dfacfe",
+        "type": "inject",
+        "z": "333f05ad22f8345a",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3600",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 270,
+        "y": 200,
+        "wires": [
+            [
+                "844dd641e2de2c8c"
+            ]
+        ]
+    },
+    {
+        "id": "844dd641e2de2c8c",
+        "type": "http request",
+        "z": "333f05ad22f8345a",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://aqmthai.com/web/home.php",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 450,
+        "y": 200,
+        "wires": [
+            [
+                "a298c52dac36f5e8"
+            ]
+        ]
+    },
+    {
+        "id": "f60a596b61cb5c87",
+        "type": "html",
+        "z": "333f05ad22f8345a",
+        "name": "",
+        "property": "payload",
+        "outproperty": "payload",
+        "tag": "table>tbody>tr>td",
+        "ret": "text",
+        "as": "single",
+        "x": 630,
+        "y": 260,
+        "wires": [
+            [
+                "499ff44a4d5b71e7",
+                "b62b3bc66adccc88"
+            ]
+        ]
+    },
+    {
+        "id": "c67df7f0313ce6a2",
+        "type": "debug",
+        "z": "333f05ad22f8345a",
+        "name": "debug 49",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1580,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "b62b3bc66adccc88",
+        "type": "function",
+        "z": "333f05ad22f8345a",
+        "name": "result",
+        "func": "var result = msg.payload;\nflow.set('status1',1);\nflow.set('output1',result);\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 320,
+        "wires": [
+            [
+                "0c769c72a686184f"
+            ]
+        ]
+    },
+    {
+        "id": "a298c52dac36f5e8",
+        "type": "function",
+        "z": "333f05ad22f8345a",
+        "name": "function 17",
+        "func": "flow.set('status1',0);\nflow.set('output1',0);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 320,
+        "wires": [
+            [
+                "f60a596b61cb5c87"
+            ]
+        ]
+    },
+    {
+        "id": "0c769c72a686184f",
+        "type": "function",
+        "z": "333f05ad22f8345a",
+        "name": "test",
+        "func": "var status1 = flow.get('status1');\nvar data1 = flow.get('output1');\nvar dataArray = [];\nif (status1 == 1) {\n    for (var i = 0; i < 68; i = i + 5) {\n        var item = {\n            station_id: data1[i + 0],\n            location: data1[i + 1],\n            datetime: data1[i + 2],\n            aqi: data1[i + 3],\n            type: data1[i + 4]\n        };\n        dataArray.push(item); // Send each payload as a separate message\n    }\n}\nmsg.payload = dataArray;\nreturn msg;\n\n\n// var status1 = flow.get('status1');\n// var data1 = flow.get('output1');\n// var dataArray = []; // Initialize an array to hold the data\n\n// if (status1 == 1) {\n//     for (var i = 0; i < data1.length; i += 7) {\n//         var item = {\n//             district: data1[i + 0],\n//             location: data1[i + 1],\n//             datetime: data1[i + 2],\n//             pm10: data1[i + 3],\n//             pm25: data1[i + 4],\n//             aqi: data1[i + 5],\n//             level: data1[i + 6]\n//         };\n\n//         dataArray.push(item); // Append each item to the array\n//     }\n// }\n\n// // Send the array as payload\n// msg.payload = dataArray;\n// return msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 890,
+        "y": 320,
+        "wires": [
+            [
+                "1d1b50241063ffe6",
+                "f779c0f50795c4c5"
+            ]
+        ]
+    },
+    {
+        "id": "c84b87c1728fc9f1",
+        "type": "mysql",
+        "z": "333f05ad22f8345a",
+        "mydb": "1f63e043feae8ce8",
+        "name": "",
+        "x": 1380,
+        "y": 180,
+        "wires": [
+            [
+                "c67df7f0313ce6a2"
+            ]
+        ]
+    },
+    {
+        "id": "499ff44a4d5b71e7",
+        "type": "debug",
+        "z": "333f05ad22f8345a",
+        "name": "debug 50",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "1d1b50241063ffe6",
+        "type": "debug",
+        "z": "333f05ad22f8345a",
+        "name": "debug 54",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1070,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "f779c0f50795c4c5",
+        "type": "function",
+        "z": "333f05ad22f8345a",
+        "name": "insert to db",
+        "func": "\n// var status1 = flow.get('status1');\n// var data = flow.get('output1');\n// // Initialize an array to store the values for each record\n// var values = [];\n\n// // Iterate through each data object in the payload\n// msg.payload.forEach(function (data) {\n//     // Convert datetime format from \"DD-MM-YYYY HH:MM\" to \"YYYY-MM-DD HH:MM:SS\"\n//     var datetimeParts = data.datetime.split(\" \");\n//     var dateParts = datetimeParts[0].split(\"-\");\n//     var timePart = datetimeParts[1];\n\n//     var formattedDatetime = dateParts[0] + \"-\" + dateParts[1] + \"-\" + dateParts[2] + \" \" + timePart + \":00\";\n\n//     // Handle \"n/a\" and \"-\" values for pm10, pm25, and aqi\n//     // var pm10 = (data.pm10 === 'n/a' || data.pm10 === '-' || data.pm10 === 'N/A') ? null : data.pm10;\n//     // var pm25 = (data.pm25 === 'n/a' || data.pm25 === '-' || data.pm25 === 'N/A') ? null : data.pm25;\n//     var aqi = (data.aqi === 'n/a' || data.aqi === '-' || data.aqi === 'N/A') ? null : data.aqi;\n\n//     // // Handle 'N/A', 'n/a', and '-' values\n//     // for (let key in data) {\n//     //     if (d[key] === 'N/A' || d[key] === '-' || d[key] === 'n/a') {\n//     //         d[key] = null;\n//     //     }\n//     // }\n\n//     // Separate location into district and full_location\n//     var locationParts = data.location.split(\" \"); // Split by space\n//     var district = locationParts[1]; // The second part is the district\n//     var fullLocation = data.location; // Use the full original location\n\n//     // Push an array containing the values for each record\n//     values.push([\n//         data.station_id,\n//         district, // Use the separated district\n//         fullLocation, // Use the full original location\n//         formattedDatetime,\n//         aqi,\n//         data.type\n//     ]);\n// });\n\n// // Construct the SQL query\n// msg.topic = \"INSERT INTO AQMTHAI (station_id, district, full_location, datetime, aqi, type) VALUES ?\";\n// msg.payload = [values];\n\n// return msg;\n\nvar status1 = flow.get('status1');\nvar data = flow.get('output1');\n// Initialize an array to store the values for each record\nvar values = [];\n\n// Iterate through each data object in the payload\nmsg.payload.forEach(function (data) {\n    // Convert datetime format from \"DD-MM-YYYY HH:MM\" to \"YYYY-MM-DD HH:MM:SS\"\n    var datetimeParts = data.datetime.split(\" \");\n    var dateParts = datetimeParts[0].split(\"-\");\n    var timePart = datetimeParts[1];\n\n    var formattedDatetime = dateParts[0] + \"-\" + dateParts[1] + \"-\" + dateParts[2] + \" \" + timePart + \":00\";\n\n    // Handle \"n/a\" and \"-\" values for pm10, pm25, and aqi\n    // var pm10 = (data.pm10 === 'n/a' || data.pm10 === '-' || data.pm10 === 'N/A') ? null : data.pm10;\n    // var pm25 = (data.pm25 === 'n/a' || data.pm25 === '-' || data.pm25 === 'N/A') ? null : data.pm25;\n    var aqi = (data.aqi === 'n/a' || data.aqi === '-' || data.aqi === 'N/A') ? null : data.aqi;\n\n    // // Handle 'N/A', 'n/a', and '-' values\n    // for (let key in data) {\n    //     if (d[key] === 'N/A' || d[key] === '-' || d[key] === 'n/a') {\n    //         d[key] = null;\n    //     }\n    // }\n\n    // Separate location into district and full_location\n    var locationParts = data.location.split(\" \"); // Split by space\n    var districtIndex = locationParts[1].startsWith(\"เขต\") || locationParts[1].startsWith(\"อำเภอ\") ? 1 : 2;\n    var district = locationParts[districtIndex]; // The district is either at index 1 or index 2\n    var fullLocation = data.location; // Use the full original location\n\n    // Push an array containing the values for each record\n    values.push([\n        data.station_id,\n        district, // Use the separated district\n        fullLocation, // Use the full original location\n        formattedDatetime,\n        aqi,\n        data.type\n    ]);\n});\n\n// Construct the SQL query\nmsg.topic = \"INSERT INTO AQMTHAI (station_id, district, full_location, datetime, aqi, type) VALUES ?\";\nmsg.payload = [values];\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1210,
+        "y": 400,
+        "wires": [
+            [
+                "f84ce25acc8c2980",
+                "d46cdcfe61c8f907"
+            ]
+        ]
+    },
+    {
+        "id": "f84ce25acc8c2980",
+        "type": "debug",
+        "z": "333f05ad22f8345a",
+        "name": "debug 55",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1470,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "d46cdcfe61c8f907",
+        "type": "mysql",
+        "z": "333f05ad22f8345a",
+        "mydb": "42a93d5ed6c55f08",
+        "name": "group09",
+        "x": 1460,
+        "y": 300,
+        "wires": [
+            [
+                "5cf0f05dd6b410c5"
+            ]
+        ]
+    },
+    {
+        "id": "5cf0f05dd6b410c5",
+        "type": "debug",
+        "z": "333f05ad22f8345a",
+        "name": "debug 56",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1670,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "1f63e043feae8ce8",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "iot.cpe.ku.ac.th",
+        "port": "3306",
+        "db": "bxxxxxxxxxx",  // student id
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "42a93d5ed6c55f08",
+        "type": "MySQLdatabase",
+        "name": "group09",
+        "host": "iot.cpe.ku.ac.th",
+        "port": "3306",
+        "db": "group09",
+        "tz": "",
+        "charset": "UTF8"
+    }
+]
