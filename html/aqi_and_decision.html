@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plot</title>
+    <title>AQI and Decision over time</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         img {
@@ -31,6 +31,7 @@
                             locationtoDecision {
                                 ts
                                 aQI
+                                decision
                             }
                         }`
                 })
@@ -40,24 +41,32 @@
 
             var dates = data.map(row => row.ts);
             var aqi = data.map(row => row.aQI);
+            var decisions = data.map(row => row.decision);
 
-            var plotData = [{
-                x: dates,
-                y: aqi,
-                type: 'scatter',
-                mode: 'lines+markers',
-                line: {color: 'blue'},
-                marker: {color: 'red'},
-            }];
+            var uniqueDecisions = Array.from(new Set(decisions));
+            var decisionValues = uniqueDecisions.map(decision => {
+                return data.filter(row => row.decision === decision).map(row => row.aQI);
+            });
+
+            var plotData = [];
+            for (var i = 0; i < uniqueDecisions.length; i++) {
+                plotData.push({
+                    x: dates,
+                    y: decisionValues[i],
+                    type: 'bar',
+                    name: uniqueDecisions[i]
+                });
+            }
 
             var layout = {
-                title: 'Time Series of AQI',
+                title: 'AQI and Decisions Over Time',
                 xaxis: {
                     title: 'Timestamp'
                 },
                 yaxis: {
                     title: 'AQI'
-                }
+                },
+                barmode: 'stack'
             };
 
             Plotly.newPlot('chart', plotData, layout);

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Charts for AQI Trends</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        img {
+            width: 100%;
+            height: auto;
+            max-width: 800px;
+            display: block;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="chart" style="width:100%;height:75vh;"></div>
+    <script>
+        async function createChart() {
+            var resp = await fetch('http://localhost:3000/graphql', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    query: `
+                        {
+                            aPI {
+                                district
+                                aqi
+                                ts
+                            }
+                        }`
+                })
+            });
+            var json = await resp.json();
+            var data = json.data.aPI;
+
+            var districts = Array.from(new Set(data.map(entry => entry.district)));
+
+            var traces = [];
+            districts.forEach(district => {
+                var districtData = data.filter(entry => entry.district === district);
+                var trace = {
+                    x: districtData.map(entry => entry.ts),
+                    y: districtData.map(entry => entry.aqi),
+                    mode: 'lines+markers',
+                    type: 'scatter',
+                    name: district
+                };
+                traces.push(trace);
+            });
+
+            var layout = {
+                title: 'AQI Trends Over Time by District',
+                xaxis: {
+                    title: 'Time'
+                },
+                yaxis: {
+                    title: 'AQI'
+                }
+            };
+
+            Plotly.newPlot('chart', traces, layout);
+        }
+
+        createChart();
+    </script>
+    <img src="static/usingplot.png" alt="Plot">
+</body>
+</html>
