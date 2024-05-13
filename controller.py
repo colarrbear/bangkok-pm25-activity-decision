@@ -33,14 +33,18 @@ def controller_get_api():  # noqa: E501
     """
     with pool.connection() as conn, conn.cursor() as cs:
         cs.execute("""
-            SELECT id, datetime, aqi
-            FROM airbkk
+            SELECT AQMTHAI.datetime, AQMTHAI.district, AQMTHAI.aqi, airbkk.aqi
+            FROM AQMTHAI INNER JOIN airbkk ON AQMTHAI.datetime = airbkk.datetime
             """)
         # cs.execute("SELECT district, aqi FROM airbkk LEFT JOIN AQMTHAI ON airbkk.datetime = AQMTHAI.datetime")
         # result = [models.BasinShort(basin_id, name) for basin_id, name in
         #           cs.fetchall()]
-        result = [models.API(ts=ts, district=district, aqi=aqi)
-                  for ts, district, aqi in cs.fetchall()]
+        result = [models.API(*row) for row in cs.fetchall()]
+
+        # Modify the "ts" format
+        # for item in result:
+        #     item.ts = item.ts.strftime('%Y-%m-%dT%H:%M')
+
     return result
 
 
