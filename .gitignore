@@ -1,4 +1,5 @@
 */api/config.py
+*/config.py
 .idea
 .DS_Store
-__pycache__
+*/__pycache__
