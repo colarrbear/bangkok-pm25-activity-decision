@@ -79,41 +79,9 @@ def controller_get_pm_api():  # noqa: E501
     """
     with pool.connection() as conn, conn.cursor() as cs:
         cs.execute("""
-            SELECT datetime, district, aqi, pm25
+            SELECT datetime, pm25, district
             FROM airbkk
             """)
-
-        result = []
-        for row in cs:
-            if None not in row:
-                ts, district, aqi, pm25 = row
-                result.append(models.PMAPI(ts=ts, district=district, aqi=aqi,
-                                           pm25=pm25))
-    # print(f'{result}')
-
+        result = [models.PMAPI(ts=ts, district=district, pm25=pm25) for
+                  ts, pm25, district in cs.fetchall()]
     return result
-    # with pool.connection() as conn, conn.cursor() as cs:
-    #     cs.execute("""
-    #         SELECT datetime, district, aqi, pm25
-    #         FROM airbkk
-    #         """)
-    #
-    #     result = []
-    #
-    #     while True:
-    #         row = cs.fetchone()
-    #         if row is None:
-    #             break
-    #         ts, district, aqi, pm25 = row
-    #         result.append(models.PMAPI(ts=ts, district=district, aqi=aqi, pm25=pm25))
-    # return result
-    # ===========
-    #     rows = cs.fetchall()
-    #
-    #     # Filter out rows with any None values
-    #     filtered_rows = [row for row in rows if None not in row]
-    #     # print(filtered_rows)
-    #     result = [models.PMAPI(ts=ts, district=district, aqi=aqi, pm25=pm25)
-    #               for ts, district, aqi, pm25 in filtered_rows]
-    # # return result
-    # print(result)

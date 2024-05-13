@@ -79,7 +79,5 @@ components:
           type: string
         ts:
           type: string
-        aqi:
-          type: number
         pm25:
           type: string

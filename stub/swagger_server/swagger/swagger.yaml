@@ -93,13 +93,10 @@ components:
           type: string
         ts:
           type: string
-        AQI:
-          type: number
-        PM2_5:
-          type: number
+        pm25:
+          type: string
       example:
-        PM2_5: 6.02745618307040320615897144307382404804229736328125
+        pm25: pm25
         district: district
-        AQI: 0.80082819046101150206595775671303272247314453125
         ts: ts
 

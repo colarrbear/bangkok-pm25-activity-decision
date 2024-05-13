@@ -11,6 +11,6 @@ tmp
 htmlcov/*
 *.swp
 env/
-stub/
+oldstub/
 *-sol.*
 ve
