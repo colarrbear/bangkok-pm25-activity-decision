@@ -41,8 +41,7 @@ or [click](https://github.com/colarrbear/bangkok-pm25-activity-decision/tree/1b5
 
 [Questionaire Responses](https://github.com/colarrbear/bangkok-pm25-activity-decision/blob/main/response_clean.csv)
 
-
-
+### For demonstration, see wiki home page.
 
 
 
