@@ -1,0 +1,218 @@
+[
+    {
+        "id": "7b0bf83cb9931706",
+        "type": "tab",
+        "label": "Airbkk_",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "d8c9b48d2d844943",
+        "type": "http request",
+        "z": "7b0bf83cb9931706",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://stations.airbkk.com/bma/aqi?lang=th",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 290,
+        "y": 180,
+        "wires": [
+            [
+                "783912faef6cf28c"
+            ]
+        ]
+    },
+    {
+        "id": "3934b918603668a3",
+        "type": "inject",
+        "z": "7b0bf83cb9931706",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3600",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 180,
+        "wires": [
+            [
+                "d8c9b48d2d844943"
+            ]
+        ]
+    },
+    {
+        "id": "c3a8e34ea4d6c1bc",
+        "type": "debug",
+        "z": "7b0bf83cb9931706",
+        "name": "debug 39",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "250d1107f25501a4",
+        "type": "function",
+        "z": "7b0bf83cb9931706",
+        "name": "result",
+        "func": "var result = msg.payload;\nflow.set('status1',1);\nflow.set('output1',result);\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 110,
+        "y": 320,
+        "wires": [
+            [
+                "8e8c99c4abf69c06"
+            ]
+        ]
+    },
+    {
+        "id": "69a65ad2ed9a5b29",
+        "type": "html",
+        "z": "7b0bf83cb9931706",
+        "name": "",
+        "property": "payload",
+        "outproperty": "payload",
+        "tag": "tr:nth-of-type(n+4)>td",
+        "ret": "text",
+        "as": "single",
+        "x": 660,
+        "y": 240,
+        "wires": [
+            [
+                "250d1107f25501a4"
+            ]
+        ]
+    },
+    {
+        "id": "783912faef6cf28c",
+        "type": "function",
+        "z": "7b0bf83cb9931706",
+        "name": "flow set",
+        "func": "flow.set('status1',0);\nflow.set('output1',0);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 180,
+        "wires": [
+            [
+                "69a65ad2ed9a5b29"
+            ]
+        ]
+    },
+    {
+        "id": "6b1b98734a3678d4",
+        "type": "debug",
+        "z": "7b0bf83cb9931706",
+        "name": "debug 41",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "8e8c99c4abf69c06",
+        "type": "function",
+        "z": "7b0bf83cb9931706",
+        "name": "test",
+        "func": "var status1 = flow.get('status1');\nvar data1 = flow.get('output1');\nvar dataArray = []; // Initialize an array to hold the data\n\nif (status1 == 1) {\n    for (var i = 0; i < data1.length; i += 7) {\n        var item = {\n            district: data1[i + 0],\n            location: data1[i + 1],\n            datetime: data1[i + 2],\n            pm10: data1[i + 3],\n            pm25: data1[i + 4],\n            aqi: data1[i + 5],\n            level: data1[i + 6]\n        };\n\n        dataArray.push(item); // Append each item to the array\n    }\n}\n\n// Send the array as payload\nmsg.payload = dataArray;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 360,
+        "wires": [
+            [
+                "bdccacd31df10ad6"
+            ]
+        ]
+    },
+    {
+        "id": "bdccacd31df10ad6",
+        "type": "function",
+        "z": "7b0bf83cb9931706",
+        "name": "insert to db",
+        "func": "var status1 = flow.get('status1');\nvar data = flow.get('output1');\n// Initialize an array to store the values for each record\nvar values = [];\n\n// Iterate through each data object in the payload\nmsg.payload.forEach(function(data) {\n    // Convert datetime format from \"DD-MM-YYYY HH:MM\" to \"YYYY-MM-DD HH:MM:SS\"\n    var datetimeParts = data.datetime.split(\" \");\n    var dateParts = datetimeParts[0].split(\"-\");\n    var timePart = datetimeParts[1];\n\n    var formattedDatetime = dateParts[2] + \"-\" + dateParts[1] + \"-\" + dateParts[0] + \" \" + timePart + \":00\";\n\n    // Handle \"n/a\" and \"-\" values for pm10, pm25, and aqi\n    var pm10 = (data.pm10 === 'n/a' || data.pm10 === '-') ? null : data.pm10;\n    var pm25 = (data.pm25 === 'n/a' || data.pm25 === '-') ? null : data.pm25;\n    var aqi = (data.aqi === 'n/a' || data.aqi === '-') ? null : data.aqi;\n\n    // Push an array containing the values for each record\n    values.push([\n        data.district,\n        data.location,\n        formattedDatetime,\n        pm10,\n        pm25,\n        aqi,\n\n        data.level\n    ]);\n});\n\n// Construct the SQL query\nmsg.topic = \"INSERT INTO airbkk (district, location, datetime, pm10, pm25, aqi, level) VALUES ?\";\nmsg.payload = [values];\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 380,
+        "wires": [
+            [
+                "c3a8e34ea4d6c1bc",
+                "315bcd91e4db9781"
+            ]
+        ]
+    },
+    {
+        "id": "315bcd91e4db9781",
+        "type": "mysql",
+        "z": "7b0bf83cb9931706",
+        "mydb": "8badb2f55939f488",
+        "name": "",
+        "x": 660,
+        "y": 480,
+        "wires": [
+            [
+                "6b1b98734a3678d4"
+            ]
+        ]
+    },
+    {
+        "id": "8badb2f55939f488",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "iot.cpe.ku.ac.th",
+        "port": "3306",
+        "db": "group09",
+        "tz": "",
+        "charset": "UTF8"
+    }
+]
