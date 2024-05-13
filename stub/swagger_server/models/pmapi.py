@@ -14,7 +14,7 @@ class PMAPI(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, district: str=None, ts: str=None, aqi: float=None, pm2_5: float=None):  # noqa: E501
+    def __init__(self, district: str=None, ts: str=None, aqi: float=None, pm25=None):  # noqa: E501
         """PMAPI - a model defined in Swagger
 
         :param district: The district of this PMAPI.  # noqa: E501
@@ -30,7 +30,7 @@ class PMAPI(Model):
             'district': str,
             'ts': str,
             'aqi': float,
-            'pm2_5': float
+            'pm25': str
         }
 
         self.attribute_map = {
@@ -42,7 +42,7 @@ class PMAPI(Model):
         self._district = district
         self._ts = ts
         self._aqi = aqi
-        self._pm2_5 = pm2_5
+        self._pm25 = pm25
 
     @classmethod
     def from_dict(cls, dikt) -> 'PMAPI':
@@ -119,17 +119,17 @@ class PMAPI(Model):
         self._aqi = aqi
 
     @property
-    def pm2_5(self) -> float:
+    def pm25(self):
         """Gets the pm2_5 of this PMAPI.
 
 
         :return: The pm2_5 of this PMAPI.
         :rtype: float
         """
-        return self._pm2_5
+        return self._pm25
 
-    @pm2_5.setter
-    def pm2_5(self, pm2_5: float):
+    @pm25.setter
+    def pm25(self, pm25):
         """Sets the pm2_5 of this PMAPI.
 
 
@@ -137,4 +137,4 @@ class PMAPI(Model):
         :type pm2_5: float
         """
 
-        self._pm2_5 = pm2_5
+        self._pm2_5 = pm25

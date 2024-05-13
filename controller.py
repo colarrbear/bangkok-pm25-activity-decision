@@ -1,4 +1,4 @@
-#i
+# i
 import connexion
 import six
 import csv
@@ -19,12 +19,11 @@ pool = PooledDB(creator=pymysql,
                 maxconnections=1,
                 blocking=True)
 
-# from swagger_server.models.api import API  # noqa: E501
-# from swagger_server.models.locationto_decision import LocationtoDecision  # noqa: E501
-# from swagger_server.models.pmapi import PMAPI  # noqa: E501
-# from swagger_server import util
-# -- SELECT AQMTHAI.datetime, AQMTHAI.district, AQMTHAI.aqi, airbkk.aqi
-#             -- FROM AQMTHAI INNER JOIN airbkk ON AQMTHAI.datetime = airbkk.datetime
+
+from swagger_server.models.api import API  # noqa: E501
+from swagger_server.models.locationto_decision import LocationtoDecision  # noqa: E501
+from swagger_server.models.pmapi import PMAPI  # noqa: E501
+from swagger_server import util
 
 def controller_get_api():  # noqa: E501
     """Returns a list of API.
@@ -39,17 +38,9 @@ def controller_get_api():  # noqa: E501
             SELECT AQMTHAI.id, AQMTHAI.datetime, AQMTHAI.district, AQMTHAI.aqi
             FROM AQMTHAI
             """)
-        result = [models.API(id=id, ts=ts, district=district, aqi=aqi) for id, ts, district, aqi in cs.fetchall()]
-        # result = [models.API(id=id, ts=ts, district=district, aqi=aqi) for id, ts, district, aqi in cs.fetchall()]
+        result = [models.API(id=id, ts=ts, district=district, aqi=aqi) for
+                  id, ts, district, aqi in cs.fetchall()]
     return result
-    # cs.execute("""
-    #                 SELECT s, big.datetime, big.district, big.aqi
-    #                 FROM AQMTHAI big
-    #                 INNER JOIN airbkk small ON big.datetime = small.datetime
-    #                 """)
-    # result = [models.AQI(station_id, name) for station_id, name in
-    #           cs.fetchall()]
-    # return result
 
 
 def controller_get_locationto_decision():  # noqa: E501
@@ -63,7 +54,8 @@ def controller_get_locationto_decision():  # noqa: E501
     # from response_clean.csv: "district" and "decision"
     # read csv file
     data = []
-    with open('response_clean.csv', 'r', encoding='utf-8', errors='ignore') as f:
+    with open('response_clean.csv', 'r', encoding='utf-8',
+              errors='ignore') as f:
         csv_reader = csv.reader(f)
         next(csv_reader)
         for row in csv_reader:
@@ -77,5 +69,51 @@ def controller_get_locationto_decision():  # noqa: E501
     return data
 
 
+def controller_get_pm_api():  # noqa: E501
+    """Returns a list of PM.
+
+     # noqa: E501
 
 
+    :rtype: List[PMAPI]
+    """
+    with pool.connection() as conn, conn.cursor() as cs:
+        cs.execute("""
+            SELECT datetime, district, aqi, pm25
+            FROM airbkk
+            """)
+
+        result = []
+        for row in cs:
+            if None not in row:
+                ts, district, aqi, pm25 = row
+                result.append(models.PMAPI(ts=ts, district=district, aqi=aqi,
+                                           pm25=pm25))
+    # print(f'{result}')
+
+    return result
+    # with pool.connection() as conn, conn.cursor() as cs:
+    #     cs.execute("""
+    #         SELECT datetime, district, aqi, pm25
+    #         FROM airbkk
+    #         """)
+    #
+    #     result = []
+    #
+    #     while True:
+    #         row = cs.fetchone()
+    #         if row is None:
+    #             break
+    #         ts, district, aqi, pm25 = row
+    #         result.append(models.PMAPI(ts=ts, district=district, aqi=aqi, pm25=pm25))
+    # return result
+    # ===========
+    #     rows = cs.fetchall()
+    #
+    #     # Filter out rows with any None values
+    #     filtered_rows = [row for row in rows if None not in row]
+    #     # print(filtered_rows)
+    #     result = [models.PMAPI(ts=ts, district=district, aqi=aqi, pm25=pm25)
+    #               for ts, district, aqi, pm25 in filtered_rows]
+    # # return result
+    # print(result)

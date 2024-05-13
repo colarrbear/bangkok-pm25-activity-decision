@@ -6,7 +6,7 @@ from wordcloud import WordCloud
 # test gitignore
 
 # Load the CSV file into a pandas DataFrame
-df = pd.read_csv("archive/response_clean.csv")
+df = pd.read_csv("../response_clean.csv")
 
 grouped_data = df.groupby('go_outside')['current_AQI'].mean().reset_index()
 
