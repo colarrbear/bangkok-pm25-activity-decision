@@ -1,0 +1,105 @@
+openapi: 3.0.0
+info:
+  title: PM2.5 Activity Decision API
+  description: This API provides the PM2.5 data for the activity decision. The data
+    is collected from the questionnaire and the PM2.5 API.
+  version: 1.0.0
+servers:
+- url: http://127.0.0.1:8080/PMDecision
+paths:
+  /API:
+    get:
+      summary: Returns a list of API.
+      operationId: controller_get_api
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/API'
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.default_controller
+  /LocationtoDecision:
+    get:
+      summary: Returns a list of Decision.
+      operationId: controller_get_locationto_decision
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LocationtoDecision'
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.default_controller
+  /PMAPI:
+    get:
+      summary: Returns a list of PM.
+      operationId: controller_get_pm_api
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PMAPI'
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.default_controller
+components:
+  schemas:
+    API:
+      type: object
+      properties:
+        id:
+          type: integer
+        ts:
+          type: string
+        district:
+          type: string
+        aqi:
+          type: number
+      example:
+        district: district
+        aqi: 6.02745618307040320615897144307382404804229736328125
+        id: 0
+        ts: ts
+    LocationtoDecision:
+      type: object
+      properties:
+        id:
+          type: integer
+        ts:
+          type: string
+        district:
+          type: string
+        AQI:
+          type: number
+        decision:
+          type: string
+      example:
+        decision: decision
+        district: district
+        AQI: 6.02745618307040320615897144307382404804229736328125
+        id: 0
+        ts: ts
+    PMAPI:
+      type: object
+      properties:
+        id:
+          type: integer
+        ts:
+          type: string
+        AQI:
+          type: number
+      example:
+        AQI: 6.02745618307040320615897144307382404804229736328125
+        id: 0
+        ts: ts
+
